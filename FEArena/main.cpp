@@ -1,0 +1,6 @@
+#include "characters.h"
+
+int main() {
+
+	return 0;
+}
