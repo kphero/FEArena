@@ -10,6 +10,7 @@
 class CharacterClass {
 	std::string name;
 	bool promoted;
+public:
 	Stats stats;
 };
 

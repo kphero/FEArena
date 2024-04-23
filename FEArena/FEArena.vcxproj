@@ -127,6 +127,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="characters.cpp" />
     <ClCompile Include="items.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
@@ -134,6 +135,7 @@
     <ClInclude Include="characters.h" />
     <ClInclude Include="classes.h" />
     <ClInclude Include="items.h" />
+    <ClInclude Include="menu.h" />
     <ClInclude Include="stats.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
