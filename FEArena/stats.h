@@ -3,61 +3,54 @@
 
 #include <iostream>
 
-#define STATS_LENGTH 7
-#define OTHER_STATS_LENGTH 3
+#define STATS_LENGTH 8 // HP, STR/MAG, SKL, SPD, LUK, DEF, RES, CON
+#define GROWTHS_LENGTH 7 // HP, STR/MAG, SKL, SPD, LUK, DEF, RES
+#define RANKS_LENGTH 8 // Sword, Lance, Axe, Bow, Anima, Light, Dark, Staff
+
+// WPN Rank Exp Breakpoints:
+// E: 1
+// D: 31
+// C: 71
+// B: 121
+// A: 181
+// S: 251
 
 class Stats {
 public:
+	// Bases
 	int currentHP;
-	int baseStats[STATS_LENGTH];
-	int otherStats[OTHER_STATS_LENGTH];
-	int growthRates[STATS_LENGTH];
+	int baseStats[STATS_LENGTH] = { 0,0,0,0,0,0,0,0 };
 	int totalStats;
-	int totalGrowths;
-	int getTotalStats() {
-		return totalStats;
-	}
 
-	int getTotalGrowths() {
-		return totalGrowths;
-	}
+	// Growths
+	int growthRates[GROWTHS_LENGTH] = { 0,0,0,0,0,0,0 };
+	int totalGrowths;
+
+	// Weapon Ranks
+	int weaponRanks[RANKS_LENGTH] = { 0,0,0,0,0,0,0,0 };
+
+	// ******** Methods ********* //
+	Stats();
+	Stats(int b[], int g[], int w[]);
+
+	// Might be uneeded
+	int getTotalStats();
+	int getTotalGrowths();
 
 	// Getter for base stats based on provided index
-	int getStats(int idx) {
-		int temp;
+	int getStats(int idx);
 
-		switch (idx) {
-		case (0):
-			temp = baseStats[0];
-			break;
-		case (1):
-			temp = baseStats[1];
-			break;
-		case (2):
-			temp = baseStats[2];
-			break;
-		case (3):
-			temp = baseStats[3];
-			break;
-		case (4):
-			temp = baseStats[4];
-			break;
-		case (5):
-			temp = baseStats[5];
-			break;
-		case (6):
-			temp = baseStats[6];
-			break;
-		case (7):
-			temp = currentHP;
-			break;
-		default:
-			temp = -1;
-			break;
-		}
+	// Assignment overload
+	Stats& operator=(Stats& other);
 
-		return temp;
-	}
+	// Display
+	void display();
+	// Determine through idx the name of stat
+	std::string statCall(int idx);
+	// Determine through idx and exp the rank of Wpn
+	std::string wpnCall(int idx);
+	char wpnRank(int idx);
+
 };
 
 #endif

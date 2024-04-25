@@ -5,13 +5,16 @@
 #include <string.h>
 #include "stats.h"
 
-#define MAX_NAME_LENGTH 10
+#define CLASS_NAME_LENGTH 10
 
 class CharacterClass {
+	int classID;
 	std::string name;
 	bool promoted;
 public:
 	Stats stats;
+	CharacterClass(std::string n, bool p, Stats& s);
+	void ImportClasses(char* filename);
 };
 
 #endif
