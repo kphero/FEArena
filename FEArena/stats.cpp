@@ -95,25 +95,37 @@ Stats& Stats::operator=(Stats& other) {
 
 // Display
 void Stats::display() {
+	std::cout << "|------ STATS -------|" << std::endl;
 	for (int i = 0; i < STATS_LENGTH; i++) {
 		// Display HP/HP or Stat
 		if (i == 0) {
-			std::cout << statCall(i) << ": " << currentHP << " / " << baseStats[i];
+			std::cout << "| " << statCall(i) << ": [";
+			std::cout << currentHP << "/" << baseStats[i] << "]";
 		}
 		else {
-			std::cout << statCall(i) << ": " << baseStats[i];
+			std::cout << "| " << statCall(i) << ": [";
+			std::cout << std::setw(5) << std::left << baseStats[i] << "]";
 		}
 		// Display growth rate
 		if (i < GROWTHS_LENGTH) {
-			std::cout << " (" << growthRates[i] << "%)";
+			std::cout << " (" << growthRates[i] << "%) |";
+		}
+		else {
+			std::cout << std::setw(8) << std::right << "|";
 		}
 		std::cout << std::endl;
 	}
+	std::cout << "|--------------------|\n" << std::endl;
 
+	std::cout << "|------------- RANKS --------------|" << std::endl << "|";
 	for (int i = 0; i < RANKS_LENGTH; i++) {
+		if (i == 4) {
+			std::cout << std::endl << "|";
+		}
 		std::cout << wpnCall(i) << ": " << wpnRank(i) << " | ";
 	}
-	std::cout << std::endl;
+	
+	std::cout << "\n|----------------------------------|\n"  << std::endl;
 }
 
 std::string Stats::statCall(int idx) {
@@ -121,7 +133,7 @@ std::string Stats::statCall(int idx) {
 
 	switch (idx) {
 	case (0):
-		temp.assign("HP");
+		temp.assign("HP ");
 		break;
 	case (1):
 		temp.assign("S/M");

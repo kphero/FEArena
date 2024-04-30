@@ -21,10 +21,21 @@
     <ClCompile Include="stats.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="classes.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stats.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="classes.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="classes.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
   </ItemGroup>
 </Project>

@@ -2,6 +2,7 @@
 #define STATS_H
 
 #include <iostream>
+#include <iomanip>
 
 #define STATS_LENGTH 8 // HP, STR/MAG, SKL, SPD, LUK, DEF, RES, CON
 #define GROWTHS_LENGTH 7 // HP, STR/MAG, SKL, SPD, LUK, DEF, RES

@@ -2,6 +2,7 @@
 #define CLASSES_H
 
 #include <iostream>
+#include <fstream>
 #include <string.h>
 #include "stats.h"
 
@@ -13,8 +14,9 @@ class CharacterClass {
 	bool promoted;
 public:
 	Stats stats;
-	CharacterClass(std::string n, bool p, Stats& s);
-	void ImportClasses(char* filename);
+	CharacterClass();
+	CharacterClass(int i, std::string n, bool p, Stats& s);
+	void importClass(std::ifstream& filename);
 };
 
 #endif
