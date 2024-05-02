@@ -97,15 +97,9 @@ Stats& Stats::operator=(Stats& other) {
 void Stats::display() {
 	std::cout << "|------ STATS -------|" << std::endl;
 	for (int i = 0; i < STATS_LENGTH; i++) {
-		// Display HP/HP or Stat
-		if (i == 0) {
-			std::cout << "| " << statCall(i) << ": [";
-			std::cout << currentHP << "/" << baseStats[i] << "]";
-		}
-		else {
-			std::cout << "| " << statCall(i) << ": [";
-			std::cout << std::setw(5) << std::left << baseStats[i] << "]";
-		}
+		// Display stat
+		std::cout << "| " << std::setw(4) << statCall(i) << ": [";
+		std::cout << std::setw(2) << baseStats[i] << "]";
 		// Display growth rate
 		if (i < GROWTHS_LENGTH) {
 			std::cout << " (" << growthRates[i] << "%) |";
@@ -128,12 +122,30 @@ void Stats::display() {
 	std::cout << "\n|----------------------------------|\n"  << std::endl;
 }
 
+void Stats::lineDisplay() {
+	std::cout << "Weapon Type(s): ";
+	for (int i = 0; i < RANKS_LENGTH; i++) {
+		if (weaponRanks[i] > 0) {
+			std::cout << wpnCall(i) << ", ";
+		}
+	}
+	std::cout << std::endl;
+	for (int i = 0; i < STATS_LENGTH; i++) {
+		std::cout << statCall(i) << ": " << baseStats[i] << ", ";
+	}
+	std::cout << std::endl;
+	for (int i = 0; i < GROWTHS_LENGTH; i++) {
+		std::cout << statCall(i) << ": " << growthRates[i] << ", ";
+	}
+	std::cout << std::endl;
+}
+
 std::string Stats::statCall(int idx) {
 	std::string temp;
 
 	switch (idx) {
 	case (0):
-		temp.assign("HP ");
+		temp.assign("HP");
 		break;
 	case (1):
 		temp.assign("S/M");

@@ -46,6 +46,7 @@ public:
 
 	// Display
 	void display();
+	void lineDisplay();
 	// Determine through idx the name of stat
 	std::string statCall(int idx);
 	// Determine through idx and exp the rank of Wpn

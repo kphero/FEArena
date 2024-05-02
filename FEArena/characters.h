@@ -2,7 +2,7 @@
 #define CHARACTERS_H
 
 #include <iostream>
-#include <string.h>
+#include <string>
 #include "classes.h"
 #include "stats.h"
 #include "items.h"
@@ -26,7 +26,7 @@ class Character {
 	Stats stats;
 	// Class
 	int classID;
-	CharacterClass* characterClass;
+	CharacterClass characterClass;
 	// Gold and Inventory, max 5 items
 	double gold;
 	Item* inventory[MAX_INVENTORY];
@@ -51,7 +51,9 @@ public:
 
 	// ********** FUNCTIONS ********** //
 	void setNewChar();
-	Character& createChar();
+	void createChar(CharacterClass classes[], int max); 
+	void chooseClass(CharacterClass classes[], int max);
+	void addStats();
 };
 
 

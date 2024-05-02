@@ -16,8 +16,7 @@ Character::Character(std::string n, int bm, Stats s, CharacterClass& c) {
 
 // ********** DESTRUCTOR ********** //
 Character::~Character() {
-	delete characterClass;
-	delete[] inventory;
+
 }
 
 // ********** GETTERS ********** //
@@ -27,27 +26,27 @@ Character::~Character() {
 // ********** DISPLAY ********** //
 void Character::displayStats() {
 	std::cout << "|---------- STATS ----------|" << std::endl;
-	std::cout << "| (1) HP: " << stats.getStats(7) << " / " << stats.getStats(0) + characterClass->stats.getStats(0) << std::endl;
-	std::cout << "| (2) STR/MAG: " << stats.getStats(1) + characterClass->stats.getStats(1) << std::endl;
-	std::cout << "| (3) SKL: " << stats.getStats(2) + characterClass->stats.getStats(2) << std::endl;
-	std::cout << "| (4) SPD: " << stats.getStats(3) + characterClass->stats.getStats(3) << std::endl;
-	std::cout << "| (5) LUK: " << stats.getStats(4) + characterClass->stats.getStats(4) << std::endl;
-	std::cout << "| (6) DEF: " << stats.getStats(5) + characterClass->stats.getStats(5) << std::endl;
-	std::cout << "| (7) RES: " << stats.getStats(6) + characterClass->stats.getStats(6) << std::endl;
-	std::cout << "|     TOTAL: " << stats.getTotalStats() + characterClass->stats.getTotalStats() << std::endl;
+	std::cout << "| (1)  HP: " << stats.getStats(7) << " / " << stats.getStats(0) + characterClass.stats.getStats(0) << std::endl;
+	std::cout << "| (2) S/M: " << stats.getStats(1) + characterClass.stats.getStats(1) << std::endl;
+	std::cout << "| (3) SKL: " << stats.getStats(2) + characterClass.stats.getStats(2) << std::endl;
+	std::cout << "| (4) SPD: " << stats.getStats(3) + characterClass.stats.getStats(3) << std::endl;
+	std::cout << "| (5) LUK: " << stats.getStats(4) + characterClass.stats.getStats(4) << std::endl;
+	std::cout << "| (6) DEF: " << stats.getStats(5) + characterClass.stats.getStats(5) << std::endl;
+	std::cout << "| (7) RES: " << stats.getStats(6) + characterClass.stats.getStats(6) << std::endl;
+	std::cout << "|     TOTAL: " << stats.getTotalStats() + characterClass.stats.getTotalStats() << std::endl;
 	std::cout << "|---------------------------|" << std::endl;
 }
 
 void Character::displayGrowths() {
 	std::cout << "|--------- GROWTHS ---------|" << std::endl;
-	std::cout << "| (1) HP: " << stats.growthRates[0] + characterClass->stats.growthRates[0] << std::endl;
-	std::cout << "| (2) STR/MAG: " << stats.growthRates[1] + characterClass->stats.growthRates[1] << std::endl;
-	std::cout << "| (3) SKL: " << stats.growthRates[2] + characterClass->stats.growthRates[2] << std::endl;
-	std::cout << "| (4) SPD: " << stats.growthRates[3] + characterClass->stats.growthRates[3] << std::endl;
-	std::cout << "| (5) LUK: " << stats.growthRates[4] + characterClass->stats.growthRates[4] << std::endl;
-	std::cout << "| (6) DEF: " << stats.growthRates[5] + characterClass->stats.growthRates[5] << std::endl;
-	std::cout << "| (7) RES: " << stats.growthRates[6] + characterClass->stats.growthRates[6] << std::endl;
-	std::cout << "|     TOTAL: " << stats.getTotalGrowths() + characterClass->stats.getTotalGrowths() << std::endl;
+	std::cout << "| (1)  HP: " << stats.growthRates[0] + characterClass.stats.growthRates[0] << std::endl;
+	std::cout << "| (2) S/M: " << stats.growthRates[1] + characterClass.stats.growthRates[1] << std::endl;
+	std::cout << "| (3) SKL: " << stats.growthRates[2] + characterClass.stats.growthRates[2] << std::endl;
+	std::cout << "| (4) SPD: " << stats.growthRates[3] + characterClass.stats.growthRates[3] << std::endl;
+	std::cout << "| (5) LUK: " << stats.growthRates[4] + characterClass.stats.growthRates[4] << std::endl;
+	std::cout << "| (6) DEF: " << stats.growthRates[5] + characterClass.stats.growthRates[5] << std::endl;
+	std::cout << "| (7) RES: " << stats.growthRates[6] + characterClass.stats.growthRates[6] << std::endl;
+	std::cout << "|     TOTAL: " << stats.getTotalGrowths() + characterClass.stats.getTotalGrowths() << std::endl;
 	std::cout << "|---------------------------|" << std::endl;
 }
 
@@ -66,34 +65,85 @@ void Character::setNewChar() {
 	gold = 100.0;
 }
 
-Character& Character::createChar() {
-	// Sets character to alive, level 1 with 0 exp
+void Character::createChar(CharacterClass classes[], int max) {
+	int valid = 0;
+
+	// Sets character to alive, level 1 with 0 exp and starting gold
 	setNewChar();
 
-	// Enter name, month TODO: Validation
-	std::cout << "Enter name: ";
-	std::cin >> name;
+	// Enter name, until valid
+	do {
+		std::cout << "Enter name (Max " << CHAR_NAME_LENGTH << " characters): ";
+		std::getline(std::cin, name);
 
-	std::cout << "Enter Birth month (1-12): ";
-	std::cin >> birthMonth;
+		if (name.length() > CHAR_NAME_LENGTH + 1) {
+			std::cout << "Name exceeds character limit!\n" << std::endl;
+			valid = 0;
+		}
+		else {
+			valid = 1;
+		}
 
-	// Choose base class TODO: Display options
-	std::cout << "Choose a class: ";
-	std::cin >> classID;
-	// TODO: Switch statement to create a class
+	} while (!valid);
 
+	// Enter birth month, until valid
+	do {
+		std::cout << "Enter Birth month (1-12): ";
+		std::cin >> birthMonth;
+
+		if (birthMonth > 12 || birthMonth < 1) {
+			std::cout << "Not a valid birth month!\n" << std::endl;
+			valid = 0;
+		}
+		else {
+			valid = 1;
+		}
+
+	} while (!valid);
+
+	// Choose base class
+	chooseClass(classes, max);
+
+	// Add stats and growths
+	addStats();
+}
+
+void Character::chooseClass(CharacterClass classes[], int max) {
+	int input;
+	// Loads in classes object
+	std::cout << "CLASSES: \n";
+	for (int i = 0; i < max; i++) {
+		std::cout << "(" << i + 1 << ") ";
+		classes[i].lineDisplay();
+	}
+	do {
+		std::cout << "Choose a class: ";
+		std::cin >> input;
+
+		if (input > max || input < 1) {
+			std::cout << "Incorrect class chosen, try again (1-" << max << ")" << std::endl;
+		}
+		else {
+			// Update character class object and class ID with valid chosen class
+			this->characterClass = classes[input - 1];
+			this->classID = input;
+		}
+	} while (input > max || input < 1);
+}
+
+void Character::addStats() {
 	// Display basestats and add points
-	displayStats();
 	do {
 		int inc, amt;
 
-		std::cout << NEW_BASE_TOTAL - (stats.getTotalStats() + characterClass->stats.getTotalStats()) << " point(s) left over. Choose a stat to increase: ";
+		displayStats();
+		std::cout << NEW_BASE_TOTAL - (stats.getTotalStats() + characterClass.stats.getTotalStats()) << " point(s) left over. Choose a stat to increase: ";
 		std::cin >> inc;
 
-		std::cout << "Increase amount: ";
+		std::cout << "Add how many points to " << stats.statCall(inc - 1) << ": ";
 		std::cin >> amt;
 
-		if (amt <= NEW_BASE_TOTAL - (stats.getTotalStats() + characterClass->stats.getTotalStats())) {
+		if (amt <= NEW_BASE_TOTAL - (stats.getTotalStats() + characterClass.stats.getTotalStats())) {
 			stats.baseStats[inc - 1] += amt;
 			stats.totalStats += amt;
 		}
@@ -101,20 +151,20 @@ Character& Character::createChar() {
 			std::cout << "Error: Incorrect amount received.\n" << std::endl;
 		}
 
-	} while (NEW_BASE_TOTAL > (stats.getTotalStats() + characterClass->stats.getTotalStats()));
+	} while (NEW_BASE_TOTAL > (stats.getTotalStats() + characterClass.stats.getTotalStats()));
 
 	// Display growths and add points
-	displayGrowths();
 	do {
 		int inc, amt;
 
-		std::cout << NEW_GROWTH_TOTAL - (stats.getTotalGrowths() + characterClass->stats.getTotalGrowths()) << " point(s) left over. Choose a growth to increase: ";
+		displayGrowths();
+		std::cout << NEW_GROWTH_TOTAL - (stats.getTotalGrowths() + characterClass.stats.getTotalGrowths()) << " point(s) left over. Choose a growth to increase: ";
 		std::cin >> inc;
 
-		std::cout << "Increase amount: ";
+		std::cout << "Add how much percentage to " << stats.statCall(inc - 1) << ": ";
 		std::cin >> amt;
 
-		if (amt <= NEW_GROWTH_TOTAL - (stats.getTotalGrowths() + characterClass->stats.getTotalGrowths())) {
+		if (amt <= NEW_GROWTH_TOTAL - (stats.getTotalGrowths() + characterClass.stats.getTotalGrowths())) {
 			stats.growthRates[inc - 1] += amt;
 			stats.totalGrowths += amt;
 		}
@@ -122,8 +172,5 @@ Character& Character::createChar() {
 			std::cout << "Error: Incorrect amount received.\n" << std::endl;
 		}
 
-	} while (NEW_GROWTH_TOTAL > (stats.getTotalGrowths() + characterClass->stats.getTotalGrowths()));
-
-
-
+	} while (NEW_GROWTH_TOTAL > (stats.getTotalGrowths() + characterClass.stats.getTotalGrowths()));
 }

@@ -19,6 +19,15 @@ CharacterClass::CharacterClass(int i, std::string n, bool p, Stats& s) {
 	stats = s;
 }
 
+CharacterClass& CharacterClass::operator=(CharacterClass& other) {
+	this->classID = other.classID;
+	this->name.assign(other.name);
+	this->promoted = other.promoted;
+	this->stats = other.stats;
+
+	return *this;
+}
+
 void CharacterClass::importClass(std::ifstream& file) {
 	char tempName[CLASS_NAME_LENGTH + 1];
 	int temp;
@@ -66,4 +75,15 @@ void CharacterClass::importClass(std::ifstream& file) {
 			this->stats.currentHP = this->stats.baseStats[0];
 		}
 	}
+}
+
+void CharacterClass::display() {
+	std::cout << "Class: " << this->name << " | Promoted: " << ((this->promoted == true) ? "Yes\n" : "No\n") << std::endl;
+	this->stats.display();
+}
+
+void CharacterClass::lineDisplay() {
+	std::cout << "Class: " << this->name << " | ";
+	this->stats.lineDisplay();
+	std::cout << std::endl;
 }
