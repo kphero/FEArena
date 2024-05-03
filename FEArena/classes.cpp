@@ -82,8 +82,12 @@ void CharacterClass::display() {
 	this->stats.display();
 }
 
+void CharacterClass::lineHeader() {
+	std::cout << "     |" << std::left << std::setw(CLASS_NAME_LENGTH) << "NAME" << "|";
+	this->stats.lineHeader();
+}
+
 void CharacterClass::lineDisplay() {
-	std::cout << "Class: " << this->name << " | ";
+	std::cout << std::left << "|" << std::setw(CLASS_NAME_LENGTH) << this->name << "|";
 	this->stats.lineDisplay();
-	std::cout << std::endl;
 }

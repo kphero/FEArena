@@ -22,6 +22,7 @@ public:
 	void importClass(std::ifstream& filename);
 	// Display class
 	void display();
+	void lineHeader();
 	void lineDisplay();
 };
 

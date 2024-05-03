@@ -140,6 +140,7 @@
     <ClInclude Include="stats.h" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="characters.txt" />
     <Text Include="classes.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -17,6 +17,7 @@
 // ********** CLASS ********** //
 class Character {
 	// Name and affinity
+	int charID;
 	std::string name;
 	int birthMonth;
 	// Level and experience
@@ -54,6 +55,9 @@ public:
 	void createChar(CharacterClass classes[], int max); 
 	void chooseClass(CharacterClass classes[], int max);
 	void addStats();
+
+	void importCharacter(std::ifstream& file);
+	void saveCharacter(std::ifstream& file);
 };
 
 

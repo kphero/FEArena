@@ -122,21 +122,33 @@ void Stats::display() {
 	std::cout << "\n|----------------------------------|\n"  << std::endl;
 }
 
+void Stats::lineHeader() {
+	for (int i = 0; i < STATS_LENGTH; i++) {
+		if (i == STATS_LENGTH - 1) {
+			std::cout << std::setw(3) << statCall(i) << "|";
+		}
+		else {
+			std::cout << std::setw(8) << statCall(i) << "|";
+		}
+	}
+	std::cout << std::setw(10) << "Weapons" << std::endl;
+}
+
 void Stats::lineDisplay() {
-	std::cout << "Weapon Type(s): ";
+	for (int i = 0; i < STATS_LENGTH; i++) {
+		std::cout << std::left << std::setw(3) << baseStats[i];
+		if (i < GROWTHS_LENGTH) {
+			std::cout << "(" << std::setw(2) << growthRates[i] << "%)";
+		}
+		std::cout << "|";
+	}
+
 	for (int i = 0; i < RANKS_LENGTH; i++) {
 		if (weaponRanks[i] > 0) {
 			std::cout << wpnCall(i) << ", ";
 		}
 	}
-	std::cout << std::endl;
-	for (int i = 0; i < STATS_LENGTH; i++) {
-		std::cout << statCall(i) << ": " << baseStats[i] << ", ";
-	}
-	std::cout << std::endl;
-	for (int i = 0; i < GROWTHS_LENGTH; i++) {
-		std::cout << statCall(i) << ": " << growthRates[i] << ", ";
-	}
+
 	std::cout << std::endl;
 }
 

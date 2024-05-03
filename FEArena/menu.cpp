@@ -48,7 +48,7 @@ void Menu::mainMenu() {
             ncMenu();
             break;
         case 2:
-            //lcMenu();
+            lcMenu();
             break;
         case 3:
             //convoyMenu();
@@ -65,8 +65,13 @@ void Menu::ncMenu() {
     //gameMenu(current);
 }
 
-//void Menu::lcMenu() {
-//
-//}
+void Menu::lcMenu() {
+    std::ifstream fin("characters.txt");
+    current.importCharacter(fin);
+    fin.close();
+
+    current.displayStats();
+    current.displayGrowths();
+}
 
 

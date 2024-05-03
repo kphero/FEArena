@@ -46,6 +46,7 @@ public:
 
 	// Display
 	void display();
+	void lineHeader();
 	void lineDisplay();
 	// Determine through idx the name of stat
 	std::string statCall(int idx);

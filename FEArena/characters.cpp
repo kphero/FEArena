@@ -26,7 +26,7 @@ Character::~Character() {
 // ********** DISPLAY ********** //
 void Character::displayStats() {
 	std::cout << "|---------- STATS ----------|" << std::endl;
-	std::cout << "| (1)  HP: " << stats.getStats(7) << " / " << stats.getStats(0) + characterClass.stats.getStats(0) << std::endl;
+	std::cout << "| (1)  HP: " << stats.getStats(0) + characterClass.stats.getStats(0) << std::endl;
 	std::cout << "| (2) S/M: " << stats.getStats(1) + characterClass.stats.getStats(1) << std::endl;
 	std::cout << "| (3) SKL: " << stats.getStats(2) + characterClass.stats.getStats(2) << std::endl;
 	std::cout << "| (4) SPD: " << stats.getStats(3) + characterClass.stats.getStats(3) << std::endl;
@@ -59,6 +59,7 @@ void Character::displayStatsAndGrowths() {
 
 // ********** FUNCTIONS ********** //
 void Character::setNewChar() {
+	charID = -1;
 	alive = true;
 	exp = 0;
 	level = 1;
@@ -112,8 +113,9 @@ void Character::chooseClass(CharacterClass classes[], int max) {
 	int input;
 	// Loads in classes object
 	std::cout << "CLASSES: \n";
+	classes[0].lineHeader();
 	for (int i = 0; i < max; i++) {
-		std::cout << "(" << i + 1 << ") ";
+		std::cout << "(" << std::setw(2) << i + 1 << ") ";
 		classes[i].lineDisplay();
 	}
 	do {
@@ -173,4 +175,63 @@ void Character::addStats() {
 		}
 
 	} while (NEW_GROWTH_TOTAL > (stats.getTotalGrowths() + characterClass.stats.getTotalGrowths()));
+}
+
+void Character::importCharacter(std::ifstream& file) {
+	if (file.is_open()) {
+		char tempName[CLASS_NAME_LENGTH + 1];
+		// Extract ID
+		file >> this->charID;
+		file.ignore(1000, ',');
+
+		// Extract Name
+		file.get(tempName, CLASS_NAME_LENGTH + 1, ',');
+		file.ignore(1000, ',');
+		this->name.assign(tempName);
+
+		//Extract Birth Month
+		file >> this->birthMonth;
+		file.ignore(1000, ',');
+
+		//Extract Level
+		file >> this->level;
+		file.ignore(1000, ',');
+
+		//Extract EXP
+		file >> this->exp;
+		file.ignore(1000, ',');
+
+		//Extract Gold
+		file >> this->gold;
+		file.ignore(1000, ',');
+
+		// Extract stats
+		for (int i = 0; i < STATS_LENGTH; i++) {
+			file >> this->stats.baseStats[i];
+			file.ignore(1000, ',');
+			this->stats.totalStats += this->stats.baseStats[i];
+		}
+
+		for (int i = 0; i < GROWTHS_LENGTH; i++) {
+			file >> this->stats.growthRates[i];
+			file.ignore(1000, ',');
+			this->stats.totalGrowths += this->stats.growthRates[i];
+		}
+
+		for (int i = 0; i < RANKS_LENGTH; i++) {
+			file >> this->stats.weaponRanks[i];
+			if (i == RANKS_LENGTH - 1) {
+				file.ignore(1000, '\n');
+			}
+			else {
+				file.ignore(1000, ',');
+			}
+		}
+		//Extract class
+		this->characterClass.importClass(file);
+	}
+}
+
+void Character::saveCharacter(std::ifstream& file) {
+
 }
