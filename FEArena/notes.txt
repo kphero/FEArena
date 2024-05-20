@@ -1,0 +1,3 @@
+Convert txt to csv
+
+ID = nID++; initialize unique character id?

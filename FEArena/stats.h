@@ -8,6 +8,11 @@
 #define GROWTHS_LENGTH 7 // HP, STR/MAG, SKL, SPD, LUK, DEF, RES
 #define RANKS_LENGTH 8 // Sword, Lance, Axe, Bow, Anima, Light, Dark, Staff
 
+extern std::string statNames[STATS_LENGTH];
+extern std::string statNamesLong[STATS_LENGTH];
+extern std::string rankNames[RANKS_LENGTH];
+extern std::string rankNamesLong[RANKS_LENGTH];
+
 // WPN Rank Exp Breakpoints:
 // E: 1
 // D: 31
@@ -17,41 +22,44 @@
 // S: 251
 
 class Stats {
-public:
 	// Bases
-	int currentHP;
 	int baseStats[STATS_LENGTH] = { 0,0,0,0,0,0,0,0 };
-	int totalStats;
+	int totalStats{};
 
 	// Growths
 	int growthRates[GROWTHS_LENGTH] = { 0,0,0,0,0,0,0 };
-	int totalGrowths;
+	int totalGrowths{};
 
 	// Weapon Ranks
 	int weaponRanks[RANKS_LENGTH] = { 0,0,0,0,0,0,0,0 };
-
-	// ******** Methods ********* //
+public:
+	// ******** CONSTRUCTORS ********* //
 	Stats();
 	Stats(int b[], int g[], int w[]);
+	Stats(Stats& other);
 
-	// Might be uneeded
-	int getTotalStats();
-	int getTotalGrowths();
+	// ******** GETTERS ********* //
+	int getTotalStats() const;
+	int getTotalGrowths() const;
+	int getStats(int idx) const;
+	int getGrowths(int idx) const;
+	int getRanks(int idx) const;
 
-	// Getter for base stats based on provided index
-	int getStats(int idx);
 
-	// Assignment overload
+	// ******** SETTERS ********* //
+	void addTotalStats(int n);
+	void addTotalGrowths(int n);
+	void addStats(int idx, int n);
+	void addGrowths(int idx, int n);
+	void addRanks(int idx, int n);
+
+	// ******** OVERLOADS ********* //
 	Stats& operator=(Stats& other);
 
-	// Display
+	// ******** DISPLAY ********* //
 	void display();
 	void lineHeader();
 	void lineDisplay();
-	// Determine through idx the name of stat
-	std::string statCall(int idx);
-	// Determine through idx and exp the rank of Wpn
-	std::string wpnCall(int idx);
 	char wpnRank(int idx);
 
 };

@@ -26,26 +26,20 @@ Character::~Character() {
 // ********** DISPLAY ********** //
 void Character::displayStats() {
 	std::cout << "|---------- STATS ----------|" << std::endl;
-	std::cout << "| (1)  HP: " << stats.getStats(0) + characterClass.stats.getStats(0) << std::endl;
-	std::cout << "| (2) S/M: " << stats.getStats(1) + characterClass.stats.getStats(1) << std::endl;
-	std::cout << "| (3) SKL: " << stats.getStats(2) + characterClass.stats.getStats(2) << std::endl;
-	std::cout << "| (4) SPD: " << stats.getStats(3) + characterClass.stats.getStats(3) << std::endl;
-	std::cout << "| (5) LUK: " << stats.getStats(4) + characterClass.stats.getStats(4) << std::endl;
-	std::cout << "| (6) DEF: " << stats.getStats(5) + characterClass.stats.getStats(5) << std::endl;
-	std::cout << "| (7) RES: " << stats.getStats(6) + characterClass.stats.getStats(6) << std::endl;
+	for (int i = 0; i < STATS_LENGTH - 1; i++) {
+		std::cout << "| (" << i + 1 << " " << std::setw(3) << statNames[i] << ": ";
+		std::cout << stats.getStats(i) + characterClass.stats.getStats(i) << std::endl;
+	}
 	std::cout << "|     TOTAL: " << stats.getTotalStats() + characterClass.stats.getTotalStats() << std::endl;
 	std::cout << "|---------------------------|" << std::endl;
 }
 
 void Character::displayGrowths() {
 	std::cout << "|--------- GROWTHS ---------|" << std::endl;
-	std::cout << "| (1)  HP: " << stats.growthRates[0] + characterClass.stats.growthRates[0] << std::endl;
-	std::cout << "| (2) S/M: " << stats.growthRates[1] + characterClass.stats.growthRates[1] << std::endl;
-	std::cout << "| (3) SKL: " << stats.growthRates[2] + characterClass.stats.growthRates[2] << std::endl;
-	std::cout << "| (4) SPD: " << stats.growthRates[3] + characterClass.stats.growthRates[3] << std::endl;
-	std::cout << "| (5) LUK: " << stats.growthRates[4] + characterClass.stats.growthRates[4] << std::endl;
-	std::cout << "| (6) DEF: " << stats.growthRates[5] + characterClass.stats.growthRates[5] << std::endl;
-	std::cout << "| (7) RES: " << stats.growthRates[6] + characterClass.stats.growthRates[6] << std::endl;
+	for (int i = 0; i < STATS_LENGTH - 1; i++) {
+		std::cout << "| (" << i + 1 << " " << std::setw(3) << statNames[i] << ": ";
+		std::cout << stats.getGrowths(i) + characterClass.stats.getGrowths(i) << std::endl;
+	}
 	std::cout << "|     TOTAL: " << stats.getTotalGrowths() + characterClass.stats.getTotalGrowths() << std::endl;
 	std::cout << "|---------------------------|" << std::endl;
 }
@@ -74,7 +68,7 @@ void Character::createChar(CharacterClass classes[], int max) {
 
 	// Enter name, until valid
 	do {
-		std::cout << "Enter name (Max " << CHAR_NAME_LENGTH << " characters): ";
+		std::cout << "[Enter name (Max " << CHAR_NAME_LENGTH << " characters)]" << std::endl << "> ";
 		std::getline(std::cin, name);
 
 		if (name.length() > CHAR_NAME_LENGTH + 1) {
@@ -89,7 +83,7 @@ void Character::createChar(CharacterClass classes[], int max) {
 
 	// Enter birth month, until valid
 	do {
-		std::cout << "Enter Birth month (1-12): ";
+		std::cout << "[Enter Birth month (1-12)]" << std::endl << "> ";
 		std::cin >> birthMonth;
 
 		if (birthMonth > 12 || birthMonth < 1) {
@@ -112,14 +106,14 @@ void Character::createChar(CharacterClass classes[], int max) {
 void Character::chooseClass(CharacterClass classes[], int max) {
 	int input;
 	// Loads in classes object
-	std::cout << "CLASSES: \n";
+	std::cout << "---------------------------------------- CLASSES ----------------------------------------\n";
 	classes[0].lineHeader();
 	for (int i = 0; i < max; i++) {
 		std::cout << "(" << std::setw(2) << i + 1 << ") ";
 		classes[i].lineDisplay();
 	}
 	do {
-		std::cout << "Choose a class: ";
+		std::cout << "[Choose a class]" << std::endl << "> ";
 		std::cin >> input;
 
 		if (input > max || input < 1) {
@@ -139,15 +133,16 @@ void Character::addStats() {
 		int inc, amt;
 
 		displayStats();
-		std::cout << NEW_BASE_TOTAL - (stats.getTotalStats() + characterClass.stats.getTotalStats()) << " point(s) left over. Choose a stat to increase: ";
+		std::cout << "[" << NEW_BASE_TOTAL - (stats.getTotalStats() + characterClass.stats.getTotalStats()) 
+				  << " point(s) left over. Choose a stat to increase]" << std::endl << "> ";
 		std::cin >> inc;
 
-		std::cout << "Add how many points to " << stats.statCall(inc - 1) << ": ";
+		std::cout << "[Add how many points to " << statNames[inc - 1] << "]" << std::endl << "> ";
 		std::cin >> amt;
 
 		if (amt <= NEW_BASE_TOTAL - (stats.getTotalStats() + characterClass.stats.getTotalStats())) {
-			stats.baseStats[inc - 1] += amt;
-			stats.totalStats += amt;
+			stats.addStats(amt, inc - 1);
+			stats.addTotalStats(amt);
 		}
 		else {
 			std::cout << "Error: Incorrect amount received.\n" << std::endl;
@@ -160,15 +155,16 @@ void Character::addStats() {
 		int inc, amt;
 
 		displayGrowths();
-		std::cout << NEW_GROWTH_TOTAL - (stats.getTotalGrowths() + characterClass.stats.getTotalGrowths()) << " point(s) left over. Choose a growth to increase: ";
+		std::cout << "[" << NEW_GROWTH_TOTAL - (stats.getTotalGrowths() + characterClass.stats.getTotalGrowths()) 
+				  << " point(s) left over. Choose a growth to increase]" << std::endl << "> ";
 		std::cin >> inc;
 
-		std::cout << "Add how much percentage to " << stats.statCall(inc - 1) << ": ";
+		std::cout << "[Add how much percentage to " << statNames[inc - 1] << "]" << std::endl << "> ";
 		std::cin >> amt;
 
 		if (amt <= NEW_GROWTH_TOTAL - (stats.getTotalGrowths() + characterClass.stats.getTotalGrowths())) {
-			stats.growthRates[inc - 1] += amt;
-			stats.totalGrowths += amt;
+			stats.addGrowths(amt, inc - 1);
+			stats.addTotalGrowths(amt);
 		}
 		else {
 			std::cout << "Error: Incorrect amount received.\n" << std::endl;
@@ -207,19 +203,25 @@ void Character::importCharacter(std::ifstream& file) {
 
 		// Extract stats
 		for (int i = 0; i < STATS_LENGTH; i++) {
-			file >> this->stats.baseStats[i];
+			int n;
+			file >> n;
+			this->stats.addStats(i, n);
+			this->stats.addTotalStats(n);
 			file.ignore(1000, ',');
-			this->stats.totalStats += this->stats.baseStats[i];
 		}
 
 		for (int i = 0; i < GROWTHS_LENGTH; i++) {
-			file >> this->stats.growthRates[i];
+			int n;
+			file >> n;
+			this->stats.addGrowths(i, n);
+			this->stats.addTotalGrowths(n);
 			file.ignore(1000, ',');
-			this->stats.totalGrowths += this->stats.growthRates[i];
 		}
 
 		for (int i = 0; i < RANKS_LENGTH; i++) {
-			file >> this->stats.weaponRanks[i];
+			int n;
+			file >> n;
+			this->stats.addRanks(i, n);
 			if (i == RANKS_LENGTH - 1) {
 				file.ignore(1000, '\n');
 			}
