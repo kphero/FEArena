@@ -24,6 +24,7 @@ class Character {
 	int level;
 	int exp;
 	// Stats and growth rates
+	int currentHP;
 	Stats stats;
 	// Class
 	int classID;

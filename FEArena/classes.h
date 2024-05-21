@@ -9,18 +9,23 @@
 #define CLASS_NAME_LENGTH 10
 
 class CharacterClass {
+	// Class ID and Class Name
 	int classID;
 	std::string name;
+	// Promoted class
 	bool promoted;
-public:
+	// Class stats
 	Stats stats;
+public:
+	// ******** CONSTRUCTORS ********* //
 	CharacterClass();
 	CharacterClass(int i, std::string n, bool p, Stats& s);
-	// Copy assignment
+	CharacterClass(CharacterClass& other);
+	// ******** OVERLOADS ********* //
 	CharacterClass& operator=(CharacterClass& other);
-	// Imports classes from text file
+	// ******** FILE I/O ********* //
 	void importClass(std::ifstream& filename);
-	// Display class
+	// ******** DISPLAY ********* //
 	void display();
 	void lineHeader();
 	void lineDisplay();

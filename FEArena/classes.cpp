@@ -1,6 +1,7 @@
 #include "classes.h"
 #include <fstream>
 
+// ******** CONSTRUCTORS ********* //
 CharacterClass::CharacterClass() {
 	name.assign("");
 	classID = -1;
@@ -19,6 +20,11 @@ CharacterClass::CharacterClass(int i, std::string n, bool p, Stats& s) {
 	stats = s;
 }
 
+CharacterClass::CharacterClass(CharacterClass& other) {
+	*this = other;
+}
+
+// ******** OVERLOADS ********* //
 CharacterClass& CharacterClass::operator=(CharacterClass& other) {
 	this->classID = other.classID;
 	this->name.assign(other.name);
@@ -28,6 +34,7 @@ CharacterClass& CharacterClass::operator=(CharacterClass& other) {
 	return *this;
 }
 
+// ******** FILE I/O ********* //
 void CharacterClass::importClass(std::ifstream& file) {
 	char tempName[CLASS_NAME_LENGTH + 1];
 	int temp;
@@ -50,19 +57,25 @@ void CharacterClass::importClass(std::ifstream& file) {
 
 			// Extract stats
 			for (int i = 0; i < STATS_LENGTH; i++) {
-				file >> this->stats.baseStats[i];
+				int n;
+				file >> n;
+				this->stats.addStats(i, n);
+				this->stats.addTotalStats(n);
 				file.ignore(1000, ',');
-				this->stats.totalStats += this->stats.baseStats[i];
 			}
 
 			for (int i = 0; i < GROWTHS_LENGTH; i++) {
-				file >> this->stats.growthRates[i];
+				int n;
+				file >> n;
+				this->stats.addGrowths(i, n);
+				this->stats.addTotalGrowths(n);
 				file.ignore(1000, ',');
-				this->stats.totalGrowths += this->stats.growthRates[i];
 			}
 
 			for (int i = 0; i < RANKS_LENGTH; i++) {
-				file >> this->stats.weaponRanks[i];
+				int n;
+				file >> n;
+				this->stats.addRanks(i, n);
 				if (i == RANKS_LENGTH - 1) {
 					file.ignore(1000, '\n');
 				}
@@ -70,13 +83,11 @@ void CharacterClass::importClass(std::ifstream& file) {
 					file.ignore(1000, ',');
 				}
 			}
-
-			// Fill-in other stats
-			this->stats.currentHP = this->stats.baseStats[0];
 		}
 	}
 }
 
+// ******** DISPLAY ********* //
 void CharacterClass::display() {
 	std::cout << "Class: " << this->name << " | Promoted: " << ((this->promoted == true) ? "Yes\n" : "No\n") << std::endl;
 	this->stats.display();

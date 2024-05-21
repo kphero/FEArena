@@ -1,17 +1,15 @@
 #include "stats.h"
 
-// Methods
-Stats::Stats() {
-	currentHP = 0;
-	totalGrowths = 0;
-	totalStats = 0;
-}
+std::string statNames[STATS_LENGTH] = { "HP", "STR", "SKL", "SPD", "LUK", "DEF", "RES", "CON"};
+std::string statNamesLong[STATS_LENGTH] = { "Hitpoints", "Strength", "Skill", "Speed", 
+										      "Luck", "Defense", "Resistance", "Constitution"};
+std::string rankNames[RANKS_LENGTH] = { "SWD", "LNC", "AXE", "BOW", "ANM", "LGT", "DRK", "STF" };
+std::string rankNamesLong[RANKS_LENGTH] = {"Sword", "Lance", "Axe", "Bow", "Anima", "Light", "Dark", "Staff"};
+
+// ******** CONSTRUCTORS ********* //
+Stats::Stats() {}
 
 Stats::Stats(int b[], int g[], int w[]) {
-	currentHP = b[0];
-	totalGrowths = 0;
-	totalStats = 0;
-
 	for (int i = 0; i < RANKS_LENGTH; i++) {
 		weaponRanks[i] = w[i];
 
@@ -27,54 +25,54 @@ Stats::Stats(int b[], int g[], int w[]) {
 	}
 }
 
-int Stats::getTotalStats() {
+// ******** GETTERS ********* //
+Stats::Stats(Stats& other) {
+	*this = other;
+}
+
+int Stats::getTotalStats() const {
 	return totalStats;
 }
 
-int Stats::getTotalGrowths() {
+int Stats::getTotalGrowths() const {
 	return totalGrowths;
 }
 
-// Getter for base stats based on provided index
-int Stats::getStats(int idx) {
-	int temp;
-
-	switch (idx) {
-	case (0):
-		temp = baseStats[0];
-		break;
-	case (1):
-		temp = baseStats[1];
-		break;
-	case (2):
-		temp = baseStats[2];
-		break;
-	case (3):
-		temp = baseStats[3];
-		break;
-	case (4):
-		temp = baseStats[4];
-		break;
-	case (5):
-		temp = baseStats[5];
-		break;
-	case (6):
-		temp = baseStats[6];
-		break;
-	case (7):
-		temp = currentHP;
-		break;
-	default:
-		temp = -1;
-		break;
-	}
-
-	return temp;
+int Stats::getStats(int idx) const {
+	return baseStats[idx];
 }
 
-// Assignment overload
+int Stats::getGrowths(int idx) const {
+	return growthRates[idx];
+}
+
+int Stats::getRanks(int idx) const {
+	return weaponRanks[idx];
+}
+
+// ******** SETTERS ********* //
+void Stats::addTotalStats(int n) {
+	totalStats += n;
+}
+
+void Stats::addTotalGrowths(int n) {
+	totalGrowths += n;
+}
+
+void Stats::addStats(int idx, int n) {
+	baseStats[idx] += n;
+}
+
+void Stats::addGrowths(int idx, int n) {
+	growthRates[idx] += n;
+}
+
+void Stats::addRanks(int idx, int n) {
+	weaponRanks[idx] += n;
+}
+
+// ******** OVERLOADS ********* //
 Stats& Stats::operator=(Stats& other) {
-	this->currentHP = other.currentHP;
 	this->totalStats = other.totalStats;
 	this->totalGrowths = other.totalGrowths;
 
@@ -93,12 +91,12 @@ Stats& Stats::operator=(Stats& other) {
 	return *this;
 }
 
-// Display
+// ******** DISPLAY ********* //
 void Stats::display() {
 	std::cout << "|------ STATS -------|" << std::endl;
 	for (int i = 0; i < STATS_LENGTH; i++) {
 		// Display stat
-		std::cout << "| " << std::setw(4) << statCall(i) << ": [";
+		std::cout << "| " << std::setw(4) << statNames[i] << ": [";
 		std::cout << std::setw(2) << baseStats[i] << "]";
 		// Display growth rate
 		if (i < GROWTHS_LENGTH) {
@@ -116,25 +114,26 @@ void Stats::display() {
 		if (i == 4) {
 			std::cout << std::endl << "|";
 		}
-		std::cout << wpnCall(i) << ": " << wpnRank(i) << " | ";
-	}
-	
+		std::cout << rankNames[i] << ": " << wpnRank(i) << " | ";
+	}	
 	std::cout << "\n|----------------------------------|\n"  << std::endl;
 }
 
 void Stats::lineHeader() {
 	for (int i = 0; i < STATS_LENGTH; i++) {
 		if (i == STATS_LENGTH - 1) {
-			std::cout << std::setw(3) << statCall(i) << "|";
+			std::cout << std::setw(3) << statNames[i] << "|";
 		}
 		else {
-			std::cout << std::setw(8) << statCall(i) << "|";
+			std::cout << std::setw(8) << statNames[i] << "|";
 		}
 	}
-	std::cout << std::setw(10) << "Weapons" << std::endl;
+	std::cout << std::setw(10) << " Weapons" << std::endl;
 }
 
 void Stats::lineDisplay() {
+	int counter = 0;
+
 	for (int i = 0; i < STATS_LENGTH; i++) {
 		std::cout << std::left << std::setw(3) << baseStats[i];
 		if (i < GROWTHS_LENGTH) {
@@ -145,77 +144,15 @@ void Stats::lineDisplay() {
 
 	for (int i = 0; i < RANKS_LENGTH; i++) {
 		if (weaponRanks[i] > 0) {
-			std::cout << wpnCall(i) << ", ";
+			if (counter != 0) {
+				std::cout << "/";
+			}
+			std::cout << rankNames[i] << "(" << wpnRank(i) << ")";
+			counter++;
 		}
 	}
 
 	std::cout << std::endl;
-}
-
-std::string Stats::statCall(int idx) {
-	std::string temp;
-
-	switch (idx) {
-	case (0):
-		temp.assign("HP");
-		break;
-	case (1):
-		temp.assign("S/M");
-		break;
-	case (2):
-		temp.assign("SKL");
-		break;
-	case (3):
-		temp.assign("SPD");
-		break;
-	case (4):
-		temp.assign("LUK");
-		break;
-	case (5):
-		temp.assign("DEF");
-		break;
-	case (6):
-		temp.assign("RES");
-		break;
-	case (7):
-		temp.assign("CON");
-		break;
-	}
-
-	return temp;
-}
-
-std::string Stats::wpnCall(int idx) {
-	std::string temp;
-
-	switch (idx) {
-	case (0):
-		temp.assign("Swd");
-		break;
-	case (1):
-		temp.assign("Lnc");
-		break;
-	case (2):
-		temp.assign("Axe");
-		break;
-	case (3):
-		temp.assign("Bow");
-		break;
-	case (4):
-		temp.assign("Anm");
-		break;
-	case (5):
-		temp.assign("Lgt");
-		break;
-	case (6):
-		temp.assign("Drk");
-		break;
-	case (7):
-		temp.assign("Stf");
-		break;
-	}
-
-	return temp;
 }
 
 char Stats::wpnRank(int idx) {
